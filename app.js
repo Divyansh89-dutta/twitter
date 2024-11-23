@@ -3,6 +3,8 @@ const cookieParser = require('cookie-parser');
 const userModel = require("./models/user.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const flash = require('connect-flash');
+const session = require('express-session');
 
 const app = express();
 
@@ -12,22 +14,34 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
+app.use(flash());
+app.use(session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: false
+}));
 
 app.get("/", function (req, res) {
     res.render("welcome");
 });
 
-app.get("/profile", isLoggedIn, function (req, res) {
-    res.render("profile");
+app.get("/profile", isLoggedIn, async function (req, res) {
+    let user = await userModel.findOne({ username: req.user.username });
+    res.render("profile", { user });
 });
 
 app.get("/register", function (req, res) {
-    res.render("register");
+    res.render("register", { errors: req.flash("errors") [0]});
 });
 
-app.post("/register", function (req, res) {
+app.post("/register", async function (req, res) {
     let { username, password } = req.body;
-
+    let user = await userModel.findOne({ username });
+    if (user) return res.redirect("/register");
+    if(user){
+        req.flash("errors", "Username already exists");
+        return res.redirect("/register");
+    }
     bcrypt.genSalt(10, function (err, salt) {
         bcrypt.hash(password, salt, async function (err, hash) {
             await userModel.create({
@@ -44,13 +58,16 @@ app.post("/register", function (req, res) {
 });
 
 app.get("/login", function (req, res) {
-    res.render("login");
+    res.render("login", { errors: req.flash("errors") [0]});
 })
 
 app.post("/login", async function (req, res) {
     let { username, password } = req.body;
     let user = await userModel.findOne({ username });
-    if (!user) return res.send("incorrect username or password");
+    if (!user) {
+        req.flash("errors", "Incorrect username or password");
+        return res.redirect("/login");
+    }
 
     bcrypt.compare(password, user.password, function (err, result) {
         if (result) {
@@ -59,7 +76,8 @@ app.post("/login", async function (req, res) {
             res.redirect("/profile");
         }
         else {
-            res.redirect("/login");
+            req.flash("errors", "Incorrect username or password");
+            return res.redirect("/login");
         }
     });
 })
@@ -70,18 +88,18 @@ app.get("/logout", function (req, res) {
 })
 
 function isLoggedIn(req, res, next) {
-    if (!req.cookies.token) return res.redirect("/login");
+    if(!req.cookies.token) {
+        req.flash("errors", "You must be logged in");
+        return res.redirect("/login");
+    }
     jwt.verify(req.cookies.token, "secret", function (err, decoded) {
         if (err) {
             res.cookie("token", "");
             return res.redirect("/login");
         }
-        else {
-            req.user = decoded;
-            next();
-        }
-    }) // don't write secret here, it's extremely unsafe
-
+        req.user = decoded;
+        next();
+    })
 }
 
 const PORT = process.env.PORT || 3000;
