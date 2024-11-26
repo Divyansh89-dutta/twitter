@@ -1,10 +1,12 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const userModel = require("./models/user.model");
+const tweetModel = require("./models/tweet.model");
+const editModel = require("./models/edit.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const flash = require('connect-flash');
-const session = require('express-session');
+const expressSession = require("express-session");
 
 const app = express();
 
@@ -14,14 +16,14 @@ app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(flash());
-app.use(session({
-    secret: "secret",
+app.use(expressSession({
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    secret: "hjagshkncbhjakskzbchkj"
 }));
+app.use(flash());
 
-app.get("/", function (req, res) {
+app.get("/", redirectToFeed, function (req, res) {
     res.render("welcome");
 });
 
@@ -31,17 +33,18 @@ app.get("/profile", isLoggedIn, async function (req, res) {
 });
 
 app.get("/register", function (req, res) {
-    res.render("register", { errors: req.flash("errors") [0]});
+    res.render("register", { error: req.flash("error")[0] });
 });
 
 app.post("/register", async function (req, res) {
     let { username, password } = req.body;
+
     let user = await userModel.findOne({ username });
-    if (user) return res.redirect("/register");
-    if(user){
-        req.flash("errors", "Username already exists");
+    if (user) {
+        req.flash("error", "account already exists, please login.");
         return res.redirect("/register");
     }
+
     bcrypt.genSalt(10, function (err, salt) {
         bcrypt.hash(password, salt, async function (err, hash) {
             await userModel.create({
@@ -58,14 +61,14 @@ app.post("/register", async function (req, res) {
 });
 
 app.get("/login", function (req, res) {
-    res.render("login", { errors: req.flash("errors") [0]});
+    res.render("login", { error: req.flash("error")[0] });
 })
 
 app.post("/login", async function (req, res) {
     let { username, password } = req.body;
     let user = await userModel.findOne({ username });
     if (!user) {
-        req.flash("errors", "Incorrect username or password");
+        req.flash("error", "username or password is incorrect.");
         return res.redirect("/login");
     }
 
@@ -76,8 +79,8 @@ app.post("/login", async function (req, res) {
             res.redirect("/profile");
         }
         else {
-            req.flash("errors", "Incorrect username or password");
-            return res.redirect("/login");
+            req.flash("error", "username or password is incorrect.")
+            res.redirect("/login");
         }
     });
 })
@@ -87,9 +90,28 @@ app.get("/logout", function (req, res) {
     res.redirect("/login");
 })
 
+app.get("/feed", isLoggedIn, async function (req, res) {
+    let tweets = await tweetModel.find()
+    res.render("feed", { tweets });
+})
+
+app.get("/createpost", isLoggedIn, function (req, res) {
+    res.render("createpost");
+})
+
+app.post("/createpost", isLoggedIn, async function (req, res) {
+    let { tweet } = req.body;
+    await tweetModel.create({
+        tweet,
+        username: req.user.username
+    })
+    res.redirect("/feed");
+})
+
+
 function isLoggedIn(req, res, next) {
-    if(!req.cookies.token) {
-        req.flash("errors", "You must be logged in");
+    if (!req.cookies.token) {
+        req.flash("error", "you must be loggedin.");
         return res.redirect("/login");
     }
     jwt.verify(req.cookies.token, "secret", function (err, decoded) {
@@ -97,10 +119,38 @@ function isLoggedIn(req, res, next) {
             res.cookie("token", "");
             return res.redirect("/login");
         }
-        req.user = decoded;
-        next();
-    })
+        else {
+            req.user = decoded;
+            return next();
+        }
+    }) // don't write secret here, it's extremely unsafe
+
 }
+
+function redirectToFeed(req, res, next) {
+    if (req.cookies.token) {
+        jwt.verify(req.cookies.token, "secret", function (err, decoded) {
+            if (err) {
+                res.cookie("token", "");
+                return next();
+            }
+            else {
+                res.redirect("/feed");
+            }
+        })
+    }
+    else{
+        return next();
+    }
+}
+    
+
+
+
+
+
+
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
