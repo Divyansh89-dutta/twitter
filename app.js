@@ -2,7 +2,6 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const userModel = require("./models/user.model");
 const tweetModel = require("./models/tweet.model");
-const editModel = require("./models/edit.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const flash = require('connect-flash');

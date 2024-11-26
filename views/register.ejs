@@ -4,39 +4,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Twitter Login Input Page</title>
+    <title>Create Account - Twitter</title>
     <!-- Latest Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Remix Icon CDN -->
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <style>
+        body {
+            background: linear-gradient(135deg, #1da1f2, #14171a);
+        }
+
+        input:focus::placeholder {
+            opacity: 0;
+            transition: opacity 0.2s ease-in-out;
+        }
+    </style>
 </head>
 
-<body class="bg-black text-white h-screen flex flex-col">
-    <!-- Top Navigation -->
-    <div class="flex items-center justify-between px-4 py-2">
-        <a href="/" class="text-white text-sm">Cancel</a>
-        <i class="ri-twitter-fill text-2xl"></i>
+<body class="text-white h-screen flex items-center justify-center">
+    <!-- Box Container -->
+    <div class="w-full max-w-md bg-black/70 rounded-lg shadow-lg p-6 space-y-6">
+        <!-- Top Navigation -->
+        <div class="flex items-center justify-between">
+            <a href="/" class="text-white text-sm hover:underline">Cancel</a>
+            <i class="ri-twitter-fill text-3xl hover:scale-110 transform transition-transform duration-300"></i>
+        </div>
+
+        <!-- Main Content -->
+        <div>
+            <h1 class="text-2xl font-bold leading-snug mb-6">
+                Create your account
+            </h1>
+
+            <!-- Form -->
+            <form autocomplete="off" action="/register" method="post" class="space-y-6">
+                <input name="username" type="text" placeholder="Phone, email, or username"
+                    class="w-full bg-transparent border-b border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 py-2 text-lg transition-colors duration-300" />
+                <input type="password" name="password" placeholder="Password"
+                    class="w-full bg-transparent border-b border-gray-500 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 py-2 text-lg transition-colors duration-300" />
+                <div class="mt-4 flex justify-end">
+                    <button disabled
+                        class="bg-gray-700 text-white text-sm py-2 px-6 rounded-full opacity-50 cursor-not-allowed transition-all duration-300">
+                        Create account
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <!-- Main Content -->
-    <div class="flex flex-col items-start px-6 mt-12 space-y-6">
-        <h1 class="text-xl font-semibold leading-tight">
-            Create your account
-        </h1>
-        <form autocomplete="off" action="/register" method="post">
-            <input name="username" type="text" placeholder="Phone, email, or username"
-                class="w-full bg-transparent border-b border-gray-500 text-white placeholder-gray-500 focus:outline-none py-2 text-lg" />
-            <input type="password" name="password" placeholder="Password"
-                class="w-full bg-transparent border-b border-gray-500 text-white placeholder-gray-500 focus:outline-none py-2 text-lg" />
-            <div class="mt-4 flex gap-4 items-center">
-                <button disabled
-                    class="bg-gray-700 text-white text-sm py-2 px-6 rounded-full opacity-50 cursor-not-allowed">
-                    Create account
-                </button>
-            </div>
-        </form>
-    </div>
-
+    <!-- Input Script -->
     <script>
         const inputs = document.querySelectorAll('input');
         const button = document.querySelector('button');

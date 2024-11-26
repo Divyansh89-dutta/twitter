@@ -1,49 +1,73 @@
 <%- include('./partials/header.ejs') %>
 
-    <!-- Header -->
-    <div class="flex items-center justify-between px-4 py-2 border-b border-gray-700">
-        <a href="/feed" class="text-blue-500 text-sm">Cancel</a>
-        <span class="text-sm text-gray-400">App Store</span>
-        <button id="createpost-btn" class="bg-blue-500 text-white text-sm px-4 py-1 rounded-full">Post</button>
+<!-- Header -->
+<div class="flex items-center justify-between px-4 py-3 bg-gray-900 border-b border-gray-700 shadow-sm">
+    <a href="/feed" class="text-blue-500 text-sm font-semibold hover:underline transition duration-200">Cancel</a>
+    <span class="text-sm text-gray-400">App Store</span>
+    <button id="createpost-btn"
+        class="bg-blue-500 text-white text-sm px-5 py-2 rounded-full shadow hover:bg-blue-600 transition duration-300">
+        Post
+    </button>
+</div>
+
+<!-- Input Section -->
+<form id="createpost-form" action="/createpost" method="post" class="bg-gray-900">
+    <div class="flex space-x-4 px-6 py-6">
+        <img src="https://via.placeholder.com/40" alt="Profile"
+            class="w-12 h-12 rounded-full hover:opacity-80 transition duration-200 shadow-md" />
+        <textarea name="tweet" placeholder="What’s happening?"
+            class="w-full bg-transparent text-gray-300 placeholder-gray-500 text-lg focus:outline-none resize-none leading-snug"
+            rows="5"></textarea>
+    </div>
+</form>
+
+<!-- Floating Reply and Tweet Options -->
+<div class="fixed bottom-0 w-full bg-gray-800 shadow-lg">
+    <!-- Reply Options -->
+    <div class="flex items-center px-6 py-4 text-blue-500 text-sm border-b border-gray-700 hover:bg-gray-700 cursor-pointer transition duration-200">
+        <i class="ri-earth-line text-lg"></i>
+        <span class="ml-2">Everyone can reply</span>
     </div>
 
-    <!-- Input Section -->
-    <form id="createpost-form" action="/createpost" method="post">
-        <div class="flex space-x-4 px-4 py-4">
-            <img src="https://via.placeholder.com/40" alt="Profile" class="w-10 h-10 rounded-full" />
-            <textarea name="tweet" placeholder="What’s happening?"
-                class="w-full bg-transparent text-gray-300 placeholder-gray-500 focus:outline-none text-lg resize-none"
-                rows="4"></textarea>
+    <!-- Tweet Options -->
+    <div class="flex justify-between items-center px-6 py-4">
+        <!-- Action Buttons -->
+        <div class="flex items-center space-x-5 text-blue-500">
+            <button class="hover:text-blue-400 transition duration-200">
+                <i class="ri-font-size text-2xl"></i>
+            </button>
+            <button class="hover:text-blue-400 transition duration-200">
+                <i class="ri-image-line text-2xl"></i>
+            </button>
+            <button class="hover:text-blue-400 transition duration-200">
+                <i class="ri-live-line text-2xl"></i>
+            </button>
+            <button class="hover:text-blue-400 transition duration-200">
+                <i class="ri-gif-line text-2xl"></i>
+            </button>
+            <button class="hover:text-blue-400 transition duration-200">
+                <i class="ri-bar-chart-grouped-line text-2xl"></i>
+            </button>
+            <button class="hover:text-blue-400 transition duration-200">
+                <i class="ri-play-list-line text-2xl"></i>
+            </button>
+            <button class="hover:text-blue-400 transition duration-200">
+                <i class="ri-map-pin-line text-2xl"></i>
+            </button>
         </div>
-    </form>
-
-    <div class="fixed bottom-0 w-full">
-        <!-- Reply Options -->
-        <div class="px-4 py-3 text-blue-500 text-sm border-b border-gray-700 flex items-center space-x-1">
-            <i class="ri-earth-line"></i>
-            <span>Everyone can reply</span>
-        </div>
-
-        <!-- Tweet Options -->
-        <div class="flex justify-between items-center px-4 py-4">
-            <div class="flex items-center space-x-4 text-blue-500">
-                <i class="ri-font-size text-xl"></i>
-                <i class="ri-image-line text-xl"></i>
-                <i class="ri-live-line text-xl"></i>
-                <i class="ri-gif-line text-xl"></i>
-                <i class="ri-bar-chart-grouped-line text-xl"></i>
-                <i class="ri-play-list-line text-xl"></i>
-                <i class="ri-map-pin-line text-xl"></i>
-            </div>
-            <i class="ri-add-circle-line text-blue-500 text-2xl"></i>
-        </div>
+        <!-- Add More -->
+        <button class="hover:text-blue-400 transition duration-200">
+            <i class="ri-add-circle-line text-blue-500 text-3xl"></i>
+        </button>
     </div>
+</div>
 
-    <script>
-        document.querySelector("#createpost-btn").addEventListener("click", function () {
-            document.querySelector("#createpost-form").submit();
-        })
-    </script>
-    </body>
+<!-- Script -->
+<script>
+    document.querySelector("#createpost-btn").addEventListener("click", function () {
+        document.querySelector("#createpost-form").submit();
+    });
+</script>
 
-    </html>
+</body>
+</html>
