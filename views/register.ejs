@@ -27,7 +27,9 @@
         <!-- Top Navigation -->
         <div class="flex items-center justify-between">
             <a href="/" class="text-white text-sm hover:underline">Cancel</a>
-            <i class="ri-twitter-fill text-3xl hover:scale-110 transform transition-transform duration-300"></i>
+            <a href="/login">
+                <i class="ri-twitter-fill text-3xl hover:scale-110 transform transition-transform duration-300"></i>
+            </a>
         </div>
 
         <!-- Main Content -->
@@ -35,7 +37,11 @@
             <h1 class="text-2xl font-bold leading-snug mb-6">
                 Create your account
             </h1>
-
+            <% if (error) { %>
+            <div class="font-semibold text-red-500">
+                <%= error %>
+            </div>
+            <% } %>
             <!-- Form -->
             <form autocomplete="off" action="/register" method="post" class="space-y-6">
                 <input name="username" type="text" placeholder="Phone, email, or username"

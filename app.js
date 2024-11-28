@@ -75,7 +75,7 @@ app.post("/login", async function (req, res) {
         if (result) {
             let token = jwt.sign({ username }, "secret"); // don't repeat this, extremely unsafe
             res.cookie("token", token);
-            res.redirect("/profile");
+            res.redirect("/feed");
         }
         else {
             req.flash("error", "username or password is incorrect.")
@@ -142,14 +142,25 @@ function redirectToFeed(req, res, next) {
         return next();
     }
 }
-    
+app.get('/like/:id', isLoggedIn, async function (req, res) {
+    let tweet = await tweetModel.findById(req.params.id);
+    if (!tweet.likes.includes(req.user.username)) {
+        tweet.likes.push(req.user.username);
+        await tweet.save();
+    }
+    else {
+        tweet.likes = tweet.likes.filter(username => username !== req.user.username);
+        await tweet.save();
+    }
+    res.redirect("/feed");
+})
 
-
-
-
-
-
-
+app.post('/comment/:id', isLoggedIn, async function (req, res) {
+    let tweet = await tweetModel.findById(req.params.id);
+    tweet.comments.push(req.body.comment);
+    await tweet.save();
+    res.redirect("/feed");
+})
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

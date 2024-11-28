@@ -9,6 +9,14 @@ const tweetSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    likes: {
+        type: [String],
+        default: []
+    },
+    comments: {
+        type: [String],
+        default: []
+    },
     createdAt: {
         type: Date,
         default: Date.now
@@ -16,3 +24,4 @@ const tweetSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model('Tweet', tweetSchema);
+
