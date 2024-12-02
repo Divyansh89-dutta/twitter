@@ -2,9 +2,11 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const userModel = require("./models/user.model");
 const tweetModel = require("./models/tweet.model");
+const upload = require("./models/matler.model");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const flash = require('connect-flash');
+const path = require('path');
 const expressSession = require("express-session");
 
 const app = express();
@@ -14,6 +16,8 @@ require("./config/db.config");
 app.set('view engine', 'ejs');
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(cookieParser());
 app.use(expressSession({
     resave: false,
@@ -83,6 +87,16 @@ app.post("/login", async function (req, res) {
         }
     });
 })
+app.get("/edit", isLoggedIn, function (req, res) {
+    res.render("edit");
+})
+app.post("/upload", isLoggedIn, upload.single('profilePicture'), async function (req, res) {
+    let user = await userModel.findOne({ username: req.user.username });
+    user.profilePicture = req.file.filename;
+    await user.save();
+    console.log(req.file.filename);
+    res.redirect("/profile");
+})
 
 app.get("/logout", function (req, res) {
     res.cookie("token", "");
@@ -90,8 +104,9 @@ app.get("/logout", function (req, res) {
 })
 
 app.get("/feed", isLoggedIn, async function (req, res) {
-    let tweets = await tweetModel.find()
-    res.render("feed", { tweets });
+    let tweets = await tweetModel.find()   
+    let user = await userModel.findOne({ username: req.user.username });
+    res.render("feed", { tweets, user });
 })
 
 app.get("/createpost", isLoggedIn, function (req, res) {
@@ -157,9 +172,16 @@ app.get('/like/:id', isLoggedIn, async function (req, res) {
 
 app.post('/comment/:id', isLoggedIn, async function (req, res) {
     let tweet = await tweetModel.findById(req.params.id);
-    tweet.comments.push(req.body.comment);
+    tweet.comments.push({
+        comment: req.body.comment,
+        username: req.user.username,
+        createdAt: new Date()
+    });
     await tweet.save();
     res.redirect("/feed");
+})
+app.get('/comment/:id', isLoggedIn, function (req, res) {
+    res.render("comment");
 })
 
 const PORT = process.env.PORT || 3000;

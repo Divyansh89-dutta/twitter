@@ -14,13 +14,14 @@
 <div class="bg-gray-900 text-white py-6 px-4">
     <div class="flex items-center space-x-6">
         <!-- Profile Image -->
-        <img src="https://via.placeholder.com/80" alt="Profile Picture" class="w-24 h-24 rounded-full border-4 border-gray-800" />
+
+        <img src="/images/uploads/<%= user.profilePicture %>" alt="Profile Picture" class="w-24 h-24 rounded-full border-4 border-gray-800" />
         <!-- Profile Info -->
         <div class="flex-1">
             <h1 class="text-2xl font-bold capitalize"><%= user.username %></h1>
             <p class="text-sm text-gray-400">@<%= user.username %></p>
             <div class="mt-4 space-x-4">
-                <button class="px-4 py-2 bg-blue-500 rounded-full text-sm">Edit Profile</button>
+                <a href="/edit" class="px-4 py-2 bg-blue-500 rounded-full text-sm">Edit Profile</a>
                 <button class="px-4 py-2 bg-gray-700 rounded-full text-sm">Get Verified</button>
             </div>
         </div>

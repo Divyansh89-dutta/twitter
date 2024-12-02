@@ -13,9 +13,18 @@ const tweetSchema = new mongoose.Schema({
         type: [String],
         default: []
     },
-    comments: {
-        type: [String],
-        default: []
+    profilePicture: {
+        type: String,
+        default: 'default.png'
+    },
+    comments: [{
+        comment: String,
+        username: String,
+        createdAt: Date
+    }],
+    postPicture: {
+        type: String,
+        default: 'default.png'
     },
     createdAt: {
         type: Date,

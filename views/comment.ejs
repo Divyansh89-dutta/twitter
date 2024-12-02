@@ -1,0 +1,75 @@
+<%- include('./partials/header.ejs') %>
+<div class="min-h-screen bg-gray-100 p-4">
+    <!-- Header -->
+    <header class="flex items-center justify-between p-4 bg-white shadow-md">
+      <h1 class="text-xl font-bold text-gray-800">Comments</h1>
+      <button class="text-blue-500 font-medium hover:underline">Back</button>
+    </header>
+  
+    <!-- Post Section -->
+    <div class="bg-white p-4 rounded-lg shadow-md mt-4">
+      <div class="flex items-start space-x-4">
+        <img
+          class="w-12 h-12 rounded-full"
+          src="https://via.placeholder.com/48"
+          alt="Profile Picture"
+        />
+        <div class="flex-1">
+          <div class="flex justify-between items-center">
+            <span class="font-semibold text-gray-800"><%= tweet.username %></span>
+            <span class="text-sm text-gray-500"><%= tweet.createdAt %></span>
+          </div>
+          <p class="text-gray-700 mt-2">
+            <%= tweet.content %>
+          </p>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Comment Input -->
+    <div class="flex items-center mt-4 bg-white p-3 rounded-lg shadow-md">
+      <img
+        class="w-10 h-10 rounded-full"
+        src="https://via.placeholder.com/40"
+        alt="User Profile"
+      />
+      <input
+        type="text"
+        name="comment"
+        placeholder="Write a comment..."
+        class="flex-1 ml-3 p-2 border border-gray-300 rounded-full focus:outline-none focus:ring focus:ring-blue-200"
+      />
+      <button type="submit" class="ml-3 px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600">
+        Reply
+      </button>
+    </div>
+  
+    <!-- Comments Section -->
+    <div class="space-y-4 mt-6">
+      <!-- Single Comment -->
+      <div class="flex items-start space-x-4 bg-white p-4 rounded-lg shadow-md">
+        <img
+          class="w-10 h-10 rounded-full"
+          src="https://via.placeholder.com/40"
+          alt="Profile Picture"
+        />
+        <div class="flex-1">
+          <div class="flex justify-between items-center">
+            <span class="font-semibold text-gray-800"><%= comment.username %></span>
+            <span class="text-sm text-gray-500"><%= comment.date %></span>
+          </div>
+          <p class="text-gray-700 mt-1">
+            <%= comment.content %>
+          </p>
+          <div class="flex items-center space-x-4 mt-2">
+            <button type="submit" class="text-blue-500 text-sm font-medium hover:underline">
+              Reply
+            </button>
+            <button class="text-gray-500 text-sm hover:text-blue-500">Like</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <%- include('./partials/footer.ejs') %>
