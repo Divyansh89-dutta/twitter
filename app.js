@@ -109,8 +109,9 @@ app.get("/feed", isLoggedIn, async function (req, res) {
     res.render("feed", { tweets, user });
 })
 
-app.get("/createpost", isLoggedIn, function (req, res) {
-    res.render("createpost");
+app.get("/createpost", isLoggedIn, async function (req, res) {
+    let user = await userModel.findOne({ username: req.user.username });
+    res.render("createpost", { user: req.user });
 })
 
 app.post("/createpost", isLoggedIn, async function (req, res) {
@@ -182,6 +183,10 @@ app.post('/comment/:id', isLoggedIn, async function (req, res) {
 })
 app.get('/comment/:id', isLoggedIn, function (req, res) {
     res.render("comment");
+})
+app.get('/delete/:id', isLoggedIn, async function (req, res) {
+    await tweetModel.findByIdAndDelete(req.params.id);
+    res.redirect("/feed");
 })
 
 const PORT = process.env.PORT || 3000;

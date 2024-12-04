@@ -13,8 +13,7 @@
 <!-- Input Section -->
 <form id="createpost-form" action="/createpost" method="post" class="bg-gray-900">
     <div class="flex space-x-4 px-6 py-6">
-        <img src="https://via.placeholder.com/40" alt="Profile"
-            class="w-12 h-12 rounded-full hover:opacity-80 transition duration-200 shadow-md" />
+        <img src="/images/uploads/<%= user.profilePicture %>" alt="Profile Picture" class="w-12 h-12 rounded-full hover:opacity-80 transition duration-200 shadow-md" />
         <textarea name="tweet" placeholder="What’s happening?"
             class="w-full bg-transparent text-gray-300 placeholder-gray-500 text-lg focus:outline-none resize-none leading-snug"
             rows="5"></textarea>

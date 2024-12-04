@@ -38,7 +38,12 @@
                     <span class="text-gray-400">@<%= tweet.username %></span>
                 </p>
             </div>
-            <i class="ri-more-2-line ml-auto text-gray-400 hover:text-gray-200 transition duration-200"></i>
+            <div class="relative group">
+              <i class="ri-more-2-line ml-auto text-gray-400 hover:text-gray-200 transition duration-200"></i>
+              <button class="absolute top-0 right-0 mt-6 opacity-0 invisible bg-blue-500 text-white px-4 py-2 rounded transition-all duration-200 group-hover:opacity-100 group-hover:visible">
+                <a href="/delete/<%= tweet._id %>"> <i class="ri-delete-bin-line"></i> </a>
+              </button>
+            </div>            
         </div>
         <span class="text-gray-400 text-sm">
             <%= tweet.createdAt.toLocaleString([], { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }) %>
