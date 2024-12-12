@@ -28,7 +28,7 @@
     <div class="bg-gray-800 rounded-xl p-4 hover:shadow-xl transition duration-300">
         <!-- User Info -->
         <div class="flex items-center space-x-3">
-            <img src="/images/uploads/<%= tweet.profilePicture %>" alt="Profile" class="w-10 h-10 rounded-full hover:opacity-90 transition duration-200" />
+            <img src="/images/uploads/<%= profilePicture.profilePicture %>" alt="Profile" class="w-10 h-10 rounded-full hover:opacity-90 transition duration-200" />
             <div>
                 <p class="text-sm">
                     <span class="font-bold text-white">
@@ -114,7 +114,11 @@
             </div>
             
           </div>
-
+          <div>
+            <a href="/document/<%= tweet._id %>">
+              <i class="ri-file-line"></i>
+            </a>
+          </div>
 
             <button class="flex items-center space-x-1 hover:text-green-500 transition duration-200">
                 <i class="ri-repeat-line"></i>

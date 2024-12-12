@@ -24,7 +24,11 @@ const tweetSchema = new mongoose.Schema({
     }],
     postPicture: {
         type: String,
-        default: 'default.png'
+        default: 'default.png, default.jpg, default.jpeg, default.webp, default.gif'
+    },
+    document: {
+        type: String,
+        default: 'default.pdf, default.doc, default.docx, default.txt, default.ppt, default.pptx, default.xls, default.xlsx, default.csv'
     },
     createdAt: {
         type: Date,

@@ -90,7 +90,7 @@ app.post("/login", async function (req, res) {
 app.get("/edit", isLoggedIn, function (req, res) {
     res.render("edit");
 })
-app.post("/upload", isLoggedIn, upload.single('profilePicture'), async function (req, res) {
+app.post("/upload", isLoggedIn, upload.single('profilePicture', 'document'), async function (req, res) {
     let user = await userModel.findOne({ username: req.user.username });
     user.profilePicture = req.file.filename;
     await user.save();
@@ -98,26 +98,29 @@ app.post("/upload", isLoggedIn, upload.single('profilePicture'), async function 
     res.redirect("/profile");
 })
 
+
 app.get("/logout", function (req, res) {
     res.cookie("token", "");
     res.redirect("/login");
 })
 
 app.get("/feed", isLoggedIn, async function (req, res) {
-    let tweets = await tweetModel.find()   
+    let tweets = await tweetModel.find()
+    let profilePicture = await userModel.findOne({ username: req.user.username });
     let user = await userModel.findOne({ username: req.user.username });
-    res.render("feed", { tweets, user });
+    res.render("feed", { tweets, user, profilePicture });
 })
 
 app.get("/createpost", isLoggedIn, async function (req, res) {
     let user = await userModel.findOne({ username: req.user.username });
-    res.render("createpost", { user: req.user });
+    res.render("createpost", { user });
 })
 
 app.post("/createpost", isLoggedIn, async function (req, res) {
     let { tweet } = req.body;
     await tweetModel.create({
         tweet,
+        profilePicture: req.user.profilePicture,
         username: req.user.username
     })
     res.redirect("/feed");
@@ -189,7 +192,7 @@ app.get('/delete/:id', isLoggedIn, async function (req, res) {
     res.redirect("/feed");
 })
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

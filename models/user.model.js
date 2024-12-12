@@ -18,7 +18,11 @@ const userSchema = new mongoose.Schema({
     },
     profilePicture: {
         type: String,
-        default: 'default.png'
+        default: 'default.png, default.jpg, default.jpeg, default.webp, default.gif'
+    },
+    document: {
+        type: String,
+        default: 'default.pdf, default.doc, default.docx, default.txt, default.ppt, default.pptx, default.xls, default.xlsx, default.csv'
     },
     posts: {
         type: Array,
